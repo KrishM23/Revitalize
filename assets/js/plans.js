@@ -24,6 +24,7 @@ import {
 } from './campus-plans.js';
 import { glossaryBtn, renderGlossaryPopups, setupGlossaryTips } from './glossary.js';
 import { downloadCampusPlanCsv } from './plan-export.js';
+import { downloadCampusPlanPdf } from './plan-pdf.js';
 
 let selectedId = 'berkeley';
 let exportState = null;
@@ -32,8 +33,8 @@ async function init() {
   try {
     await loadData();
     setupSelector();
-    setupPrint();
-    setupDownload();
+    setupPdfDownload();
+    setupCsvDownload();
     setupGlossaryHost();
     setupFromHash();
     render();
@@ -58,12 +59,25 @@ function setupSelector() {
   });
 }
 
-function setupPrint() {
-  const btn = document.getElementById('printPlanBtn');
-  if (btn) btn.addEventListener('click', () => window.print());
+function setupPdfDownload() {
+  const btn = document.getElementById('downloadPdfBtn');
+  if (!btn) return;
+  const label = btn.querySelector('span');
+  btn.addEventListener('click', () => {
+    if (!exportState) return;
+    const original = label ? label.textContent : '';
+    const ok = downloadCampusPlanPdf(exportState);
+    if (!ok) {
+      if (label) label.textContent = 'PDF unavailable';
+      window.print();
+    } else if (label) {
+      label.textContent = 'Downloaded';
+    }
+    if (label) setTimeout(() => { label.textContent = original; }, 2200);
+  });
 }
 
-function setupDownload() {
+function setupCsvDownload() {
   const btn = document.getElementById('downloadPlanBtn');
   if (btn) btn.addEventListener('click', () => {
     if (exportState) downloadCampusPlanCsv(exportState);

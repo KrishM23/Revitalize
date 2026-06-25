@@ -1533,14 +1533,14 @@ canvas { display: block; max-width: 100%; }
 }
 .contact-note strong { color: var(--text); }
 
-/* Print / PDF and download button alignment */
-#printPlanBtn,
+/* Plan export button alignment */
+#downloadPdfBtn,
 #downloadPlanBtn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
 }
-#printPlanBtn svg,
+#downloadPdfBtn svg,
 #downloadPlanBtn svg { flex-shrink: 0; }
 
 /* ── PRINT / PDF EXPORT (action plans and other pages) ── */
@@ -1574,7 +1574,7 @@ canvas { display: block; max-width: 100%; }
   .campus-select,
   .topbar-actions,
   #downloadPlanBtn,
-  #printPlanBtn,
+  #downloadPdfBtn,
   .page-footer { display: none !important; }
 
   .content { padding: 0 !important; max-width: 100% !important; }
