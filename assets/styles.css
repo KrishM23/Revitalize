@@ -170,10 +170,13 @@ a:hover { color: #4fdec0; }
 }
 
 .promise-badge {
-  display: inline-block;
-  font-size: 24px;
-  margin-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  margin-bottom: 8px;
 }
+.promise-badge svg { width: 22px; height: 22px; }
 
 .promise-kicker {
   font-size: 10.5px;
@@ -1503,10 +1506,17 @@ canvas { display: block; max-width: 100%; }
 }
 .contact-card:hover { border-color: var(--accent); }
 .contact-card-icon {
-  display: block;
-  font-size: 24px;
-  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  margin-bottom: 14px;
 }
+.contact-card-icon svg { width: 20px; height: 20px; }
 .contact-card h4 {
   font-size: 15px;
   font-weight: 600;
