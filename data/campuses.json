@@ -1,0 +1,127 @@
+{
+  "updated": "2026-06",
+  "source": "https://sustainabilityreport.ucop.edu/",
+  "campuses": [
+    {
+      "id": "systemwide",
+      "name": "UC Systemwide",
+      "shortName": "All UCs",
+      "color": "#2F6B4F",
+      "region": "California",
+      "enrollment": 299407,
+      "stars": null,
+      "type": "system",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/policy-progress/"
+    },
+    {
+      "id": "berkeley",
+      "name": "UC Berkeley",
+      "shortName": "Berkeley",
+      "color": "#003262",
+      "region": "Bay Area",
+      "enrollment": 45057,
+      "stars": "Platinum",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-berkeley/"
+    },
+    {
+      "id": "davis",
+      "name": "UC Davis",
+      "shortName": "Davis",
+      "color": "#022851",
+      "region": "Central Valley",
+      "enrollment": 40031,
+      "stars": "Gold",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-davis/"
+    },
+    {
+      "id": "irvine",
+      "name": "UC Irvine",
+      "shortName": "Irvine",
+      "color": "#0064A4",
+      "region": "Orange County",
+      "enrollment": 36203,
+      "stars": "Platinum",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-irvine/"
+    },
+    {
+      "id": "ucla",
+      "name": "UCLA",
+      "shortName": "UCLA",
+      "color": "#2774AE",
+      "region": "Los Angeles",
+      "enrollment": 47418,
+      "stars": "Gold",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/ucla/"
+    },
+    {
+      "id": "merced",
+      "name": "UC Merced",
+      "shortName": "Merced",
+      "color": "#0A5F8E",
+      "region": "Central Valley",
+      "enrollment": 9204,
+      "stars": "Platinum",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-merced/"
+    },
+    {
+      "id": "riverside",
+      "name": "UC Riverside",
+      "shortName": "Riverside",
+      "color": "#003DA5",
+      "region": "Inland Empire",
+      "enrollment": 26809,
+      "stars": "Gold",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-riverside/"
+    },
+    {
+      "id": "ucsd",
+      "name": "UC San Diego",
+      "shortName": "San Diego",
+      "color": "#182B49",
+      "region": "San Diego",
+      "enrollment": 43481,
+      "stars": "Gold",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-san-diego/"
+    },
+    {
+      "id": "ucsf",
+      "name": "UC San Francisco",
+      "shortName": "UCSF",
+      "color": "#052049",
+      "region": "San Francisco",
+      "enrollment": 3220,
+      "stars": "Gold",
+      "type": "graduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-san-francisco/"
+    },
+    {
+      "id": "ucsb",
+      "name": "UC Santa Barbara",
+      "shortName": "Santa Barbara",
+      "color": "#003660",
+      "region": "Central Coast",
+      "enrollment": 26420,
+      "stars": "Gold",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-santa-barbara/"
+    },
+    {
+      "id": "ucsc",
+      "name": "UC Santa Cruz",
+      "shortName": "Santa Cruz",
+      "color": "#003C6C",
+      "region": "Central Coast",
+      "enrollment": 19478,
+      "stars": "Gold",
+      "type": "undergraduate",
+      "reportUrl": "https://sustainabilityreport.ucop.edu/2025/locations/uc-santa-cruz/"
+    }
+  ]
+}

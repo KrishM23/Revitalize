@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Serve & Open Dashboard",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["${workspaceFolder}/serve.sh", "8080"],
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "action": "debugWithChrome",
+        "pattern": "running at (https?://\\S+)",
+        "uriFormat": "http://localhost:8080",
+        "killOnServerStop": true
+      }
+    },
+    {
+      "name": "Serve only (port 8080)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["${workspaceFolder}/serve.sh", "8080"],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

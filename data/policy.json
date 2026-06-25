@@ -1,0 +1,18 @@
+{
+  "baselineYear": 2019,
+  "targetYear": 2045,
+  "reductionPct": 0.9,
+  "policyName": "UC Sustainable Practices Policy",
+  "policyDate": "July 2023",
+  "policyUrl": "https://policy.ucop.edu/doc/3100155/SustainablePractices",
+  "description": "Each campus and associated health system must reduce total Scope 1, Scope 2, and identified Scope 3 emissions 90% from 2019 levels by 2045, neutralizing residual emissions through carbon removal.",
+  "scopes": {
+    "scope1": "Direct emissions from on-campus combustion (natural gas, fleet, refrigerants)",
+    "scope2": "Indirect emissions from purchased electricity and steam",
+    "scope3": "Commuting, business air travel, and other indirect sources"
+  },
+  "dataSource": "UC Annual Report on Sustainable Practices (2024 & 2025 editions)",
+  "dataSourceUrl": "https://sustainabilityreport.ucop.edu/",
+  "inventoryYear": 2024,
+  "verification": "Third-party verified annually; 2024 inventory per UC 2025 Annual Report"
+}

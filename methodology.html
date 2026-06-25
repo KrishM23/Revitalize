@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Methodology | Revitalize</title>
+<meta name="description" content="How Revitalize sources, verifies, and calculates UC campus greenhouse gas emissions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="assets/terrain-logo.svg" alt="">
+      <span class="brand-name">Revitalize</span>
+    </div>
+    <nav class="side-nav">
+      <a href="index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="plans.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        <span>Action plans</span>
+      </a>
+      <a href="compare.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="20" x2="6" y2="12"/><line x1="12" y1="20" x2="12" y2="6"/><line x1="18" y1="20" x2="18" y2="14"/></svg>
+        <span>Compare</span>
+      </a>
+      <a href="methodology.html" class="active" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><line x1="8" y1="7" x2="14" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        <span>Methodology</span>
+      </a>
+      <a href="contact.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+        <span>Contact</span>
+      </a>
+      <a href="data/uc_emissions.csv" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 11 5 4 5-4"/><path d="M5 21h14"/></svg>
+        <span>Download data</span>
+      </a>
+    </nav>
+    <div class="side-card promise-card">
+      <span class="promise-badge">🌎</span>
+      <p class="promise-kicker">UC's Climate Promise</p>
+      <p class="promise-headline"><strong>90%</strong> cut in emissions</p>
+      <p class="promise-detail">from 2019 levels by <strong>2045</strong></p>
+      <a class="promise-link" href="methodology.html">How we measure →</a>
+    </div>
+  </aside>
+
+  <main class="content">
+    <header class="page-head">
+      <p class="page-kicker">Transparency & trust</p>
+      <h1>Methodology</h1>
+      <p>Every number on Revitalize traces back to a verified UC source. Here's exactly how we measure, calculate, and present climate impact.</p>
+    </header>
+
+    <div class="prose">
+
+    <section class="method-block">
+      <h2>Data sources</h2>
+      <p>All emissions figures come from the <a href="https://sustainabilityreport.ucop.edu/" target="_blank" rel="noopener">UC Annual Report on Sustainable Practices</a>, published by the University of California Office of the President. Each campus submits a third-party verified greenhouse gas inventory annually.</p>
+      <ul>
+        <li><strong>Primary source:</strong> <a href="https://sustainabilityreport.ucop.edu/" target="_blank" rel="noopener">sustainabilityreport.ucop.edu</a></li>
+        <li><strong>Current inventory:</strong> Calendar year <strong>2024</strong> (from the 2025 Annual Report); 2023 figures from the 2024 report</li>
+        <li><strong>Policy reference:</strong> <a href="https://policy.ucop.edu/doc/3100155/SustainablePractices" target="_blank" rel="noopener">UC Policy on Sustainable Practices</a> (updated July 2023)</li>
+        <li><strong>Reporting period:</strong> Calendar year (January-December)</li>
+        <li><strong>Verification:</strong> Third-party audit completed by early the following year</li>
+        <li><strong>Refresh:</strong> Dataset updated from UC's official Google Sheets behind each campus report. Re-run <code>python3 scripts/update_emissions.py</code> when a new annual report is published.</li>
+      </ul>
+    </section>
+
+    <section class="method-block">
+      <h2>What we measure</h2>
+      <p>Revitalize reports total greenhouse gas emissions in metric tons of carbon dioxide equivalent (t CO₂e) across three scopes:</p>
+      <div class="scope-cards">
+        <div class="scope-card scope-1">
+          <h3>Scope 1</h3>
+          <p>Direct emissions from on-campus combustion, including natural gas for heating and cooling, campus fleet, emergency generators, and refrigerants.</p>
+        </div>
+        <div class="scope-card scope-2">
+          <h3>Scope 2</h3>
+          <p>Indirect emissions from purchased electricity and steam. UC's Clean Power Program supplies 100% clean electricity to seven campuses.</p>
+        </div>
+        <div class="scope-card scope-3">
+          <h3>Scope 3</h3>
+          <p>Commuting, business air travel, and other indirect sources. UC reports identified Scope 3 categories per campus.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="method-block">
+      <h2>UC climate commitment</h2>
+      <p>In July 2023, UC adopted a strengthened climate policy requiring each campus and associated health system to:</p>
+      <blockquote>
+        Reduce total Scope 1, Scope 2, and identified Scope 3 emissions <strong>90% from 2019 levels by 2045</strong>, neutralizing any residual emissions through carbon removal investments.
+      </blockquote>
+      <p>Revitalize visualizes this as a linear commitment path from each campus's 2019 baseline to its 2045 target. This is a <em>policy pace line</em>, not a forecast of future emissions.</p>
+    </section>
+
+    <section class="method-block">
+      <h2>Calculations</h2>
+      <dl class="def-list">
+        <dt>2019 baseline</dt>
+        <dd>Total Scopes 1+2+3 emissions reported for calendar year 2019, used as the policy reference year.</dd>
+        <dt>2045 target</dt>
+        <dd>Baseline × (1 − 0.90) = 10% of 2019 emissions remaining.</dd>
+        <dt>Progress to goal</dt>
+        <dd>(Baseline − Latest) ÷ (Baseline − Target) × 100. Shows how far along the required reduction path a campus is.</dd>
+        <dt>Linear trend</dt>
+        <dd>Ordinary least-squares regression on reported emissions since 2015. Extrapolation is illustrative only, not a prediction.</dd>
+        <dt>Pace indicator</dt>
+        <dd>Compares latest reported emissions to the linear policy path for the same year. "On pace" means at or below the path; "behind" means above.</dd>
+        <dt>Per-student intensity</dt>
+        <dd>Latest total emissions ÷ fall enrollment. Useful for comparing campuses of different sizes; not a UC official metric.</dd>
+      </dl>
+    </section>
+
+    <section class="method-block">
+      <h2>Climate progress tiers</h2>
+      <p>Revitalize awards each campus a <strong>climate progress tier</strong>, a shield badge with 12 ranks across four materials (Bronze → Silver → Gold → Diamond), each with three levels of increasing prestige. Your tier is earned from <strong>progress toward the 2045 goal</strong> (% of the required 90% reduction already achieved), not from STARS or other ratings.</p>
+      <div class="scope-cards">
+        <div class="scope-card scope-1">
+          <h3>Bronze. Sprout to Grove</h3>
+          <p>0-30% of the way to the goal. Early progress. Every cut counts.</p>
+        </div>
+        <div class="scope-card scope-2">
+          <h3>Silver. Spark to Surge</h3>
+          <p>30-60%. Making measurable progress toward 2045.</p>
+        </div>
+        <div class="scope-card scope-3">
+          <h3>Gold & Diamond. Rise to Legend</h3>
+          <p>60%+ through goal achieved. Campuses closest to the 2045 target.</p>
+        </div>
+      </div>
+      <dl class="def-list">
+        <dt>How tiers are calculated</dt>
+        <dd>Progress to goal = (2019 baseline − latest emissions) ÷ (baseline − 2045 target) × 100. Each ~10 percentage points unlocks the next rank.</dd>
+        <dt>STARS vs. climate tiers</dt>
+        <dd>STARS (Platinum, Gold) is UC's separate sustainability rating. Climate tiers reflect emissions cuts only. A campus can hold STARS Platinum while still climbing the ladder.</dd>
+        <dt>Shield design</dt>
+        <dd>Shields gain detail as you level up within each material: simple crest at level I, angular shield at II, winged badge at III.</dd>
+      </dl>
+    </section>
+
+    <section class="method-block">
+      <h2>How we look ahead</h2>
+      <p>To show where a campus is heading, we fit several forecasting models to its verified emissions history and choose the model with the strongest validation results. The choice is made with <strong>leave-one-out cross-validation (LOOCV)</strong>. Each model is tested on years it was not trained on. When several models perform similarly, we combine them using validation-based weights.</p>
+      <div class="scope-cards">
+        <div class="scope-card scope-1">
+          <h3>Linear & weighted OLS</h3>
+          <p>Ordinary least-squares plus a recency-weighted variant (exponential decay, 4-year half-life) that emphasizes recent years.</p>
+        </div>
+        <div class="scope-card scope-2">
+          <h3>Polynomial & Ridge</h3>
+          <p>Quadratic fit for curvature; ridge-regularized variant reduces overfitting on sparse campus data.</p>
+        </div>
+        <div class="scope-card scope-3">
+          <h3>Log-linear, Holt & Damped Holt</h3>
+          <p>Exponential decay model, Holt's linear smoothing, and a damped-trend variant that prevents runaway long-range extrapolation.</p>
+        </div>
+      </div>
+      <dl class="def-list">
+        <dt>Model selection</dt>
+        <dd>Lowest leave-one-out cross-validation error wins. When cross-validation isn't possible (very few points), in-sample RMSE is used as a fallback. A weighted ensemble is formed across all plausible models (weight ∝ 1/error).</dd>
+        <dt>Sanity bounds</dt>
+        <dd>Candidate models are rejected if they project physically implausible values (negative emissions or runaway growth beyond realistic year-over-year rates).</dd>
+        <dt>Prediction intervals</dt>
+        <dd>A 95% range around each projection, computed from model standard error. The interval widens the further out we project (using the ordinary-least-squares prediction formula s·√(1 + 1/n + (x − x̄)²/Sₓₓ)), so the uncertainty for 2045 is honestly larger than for next year.</dd>
+        <dt>Projected cut by 2045</dt>
+        <dd>The reduction from the 2019 baseline implied by the central projection: (baseline − projected 2045) ÷ baseline. Shown alongside the 90% goal so the gap is explicit. Because a 90% cut is much steeper than recent trends, most campuses project short of the goal under current conditions. This is a statistical extrapolation, not a limit on what is possible.</dd>
+        <dt>Important caveat</dt>
+        <dd>Forecasts extrapolate historical trends. They do not account for planned decarbonization projects (e.g., Berkeley Clean Energy Campus). Treat as statistical projections, not policy forecasts.</dd>
+      </dl>
+    </section>
+
+    <section class="method-block">
+      <h2>Data quality & limitations</h2>
+      <ul>
+        <li><strong>Verified vs. reported:</strong> Figures are marked as verified once third-party audit completes. Early report figures may be updated.</li>
+        <li><strong>Health systems:</strong> Some campuses include associated health centers in totals; others report separately. Check each campus report for scope.</li>
+        <li><strong>UC Merced:</strong> Scopes 1 and 2 are offset to net zero via voluntary carbon offsets; Scope 3 is reported separately.</li>
+        <li><strong>Historical revisions:</strong> UC revised Scope 3 accounting in recent reports (adding solid waste and business travel, backfilled to 2019). Revitalize uses the latest official figures from UC's published inventories so baselines align with current policy reporting.</li>
+        <li><strong>Not included:</strong> Lawrence Berkeley National Lab, UC Agriculture and Natural Resources, and some health centers are excluded from this undergraduate campus view.</li>
+      </ul>
+    </section>
+
+    <section class="method-block">
+      <h2>Download & reproduce</h2>
+      <p>All data is available as open CSV files for independent analysis:</p>
+      <div class="download-cards">
+        <a href="data/uc_emissions.csv" class="download-card" download>
+          <strong>uc_emissions.csv</strong>
+          <span>Annual emissions by campus and year</span>
+        </a>
+        <a href="data/campuses.json" class="download-card" download>
+          <strong>campuses.json</strong>
+          <span>Campus metadata and source links</span>
+        </a>
+        <a href="data/policy.json" class="download-card" download>
+          <strong>policy.json</strong>
+          <span>UC climate policy parameters</span>
+        </a>
+        <a href="notebooks/ucla_carbon_tracker.Rmd" class="download-card">
+          <strong>ucla_carbon_tracker.Rmd</strong>
+          <span>Reproducible R analysis notebook</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="method-block">
+      <h2>Citations</h2>
+      <p class="citation">University of California Office of the President. <em>Annual Report on Sustainable Practices</em>. sustainabilityreport.ucop.edu. Accessed 2024.</p>
+      <p class="citation">University of California. <em>Policy on Sustainable Practices</em>. policy.ucop.edu/doc/3100155/SustainablePractices. July 2023.</p>
+    </section>
+
+    </div>
+
+    <p class="page-footer">Independent UC climate progress, built on verified public data. · <a href="https://sustainabilityreport.ucop.edu/" target="_blank" rel="noopener">UC Sustainability Reports</a></p>
+  </main>
+</div>
+
+</body>
+</html>

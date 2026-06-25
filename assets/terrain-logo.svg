@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="228" viewBox="0 0 420 228" aria-labelledby="title desc" role="img">
+  <title id="title">Terrain Logo</title>
+  <desc id="desc">Clean minimalist mountain logo for Terrain</desc>
+
+  <polygon points="80,180 170,40 280,180" fill="#2e5c3d" stroke="#1f3f2a" stroke-width="8"/>
+  <polygon points="40,180 125,70 210,180" fill="#3a7a4f" stroke="#1f3f2a" stroke-width="6"/>
+  <polygon points="160,180 225,95 305,180" fill="#4a9a5f" stroke="#1f3f2a" stroke-width="5"/>
+
+  <text x="75.5" y="215" fill="#1f2e27" font-family="Helvetica, Arial, sans-serif" font-size="62" font-weight="900" letter-spacing="-1.5">TERR</text>
+  <path d="M 248 215 L 263.5 160 L 279 215" fill="none" stroke="#1f2e27" stroke-width="11.5" stroke-linejoin="round" stroke-linecap="round"/>
+  <text x="282.5" y="215" fill="#1f2e27" font-family="Helvetica, Arial, sans-serif" font-size="62" font-weight="900" letter-spacing="-1.5">IN</text>
+</svg>

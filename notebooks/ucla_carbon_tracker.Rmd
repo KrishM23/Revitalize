@@ -1,0 +1,201 @@
+---
+title: "Rebuild the UCLA carbon tracker"
+subtitle: "Carbon Trackers · R · UCLA Emissions Reports"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Rebuild the UCLA carbon tracker
+
+**Carbon Trackers · R · UCLA Emissions Reports**
+
+Recreate the live carbon tracker: verified UCLA greenhouse gas totals (Scopes 1+2+3), a trend from the 2019 baseline, and UC's **90% reduction by 2045** commitment.
+
+**You will build:** a reproducible emissions chart plus interpretation of progress vs. pace.
+
+---
+
+## Learning objectives
+
+- Read a verified campus GHG inventory time series
+- Compute a policy target line (90% cut from 2019 by 2045)
+- Fit and interpret a simple linear trend
+- Explain why extrapolation ≠ forecast
+
+**Time:** ~1.5 hr · Compare with [live tracker](../index.html) · Data: [ucla_emissions.csv](../data/ucla_emissions.csv)
+
+---
+
+## For mentors
+
+- **Prerequisites:** One beginner project; basic comfort with plots.
+- **Key vocabulary:** *Scope 1* = on-campus fuels · *Scope 2* = purchased electricity · *Scope 3* = commute, travel, etc.
+- **Watch for:** Students mixing up the old 2025 net-zero pledge with the current **2045 / 90%** policy.
+- **Tip:** Open the [live tracker](../index.html) side-by-side and compare lines.
+
+---
+
+## 1. Setup
+
+**Mentor check-in:** *What does "metric tons CO₂e" mean — why the "e"?*
+
+```{r packages}
+required <- c("dplyr", "ggplot2", "readr", "scales", "broom")
+missing <- required[!vapply(required, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1))]
+if (length(missing)) install.packages(missing, repos = "https://cloud.r-project.org")
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(scales)
+library(broom)
+```
+
+---
+
+## 2. Load verified UCLA emissions
+
+**Goal:** Import the same annual totals used on the live tracker.
+
+**Concept:** Each row is one calendar year of **Scopes 1+2+3** from UC Annual Sustainability Reports.
+
+**You should see:** A table from 2009–2023 with `year` and `emissions`.
+
+```{r load}
+load_emissions <- function() {
+  paths <- c(
+    "data/ucla_emissions.csv",
+    "../data/ucla_emissions.csv",
+    "notebooks/data/ucla_emissions.csv"
+  )
+  for (p in paths) if (file.exists(p)) return(read_csv(p, show_col_types = FALSE))
+  stop("Could not find data/ucla_emissions.csv")
+}
+
+emissions <- load_emissions()
+emissions
+```
+
+**Goal:** Define UC policy constants.
+
+**You should see:** Baseline **335,331 t** and 2045 target **~33,533 t** (90% reduction).
+
+**Mentor check-in:** *Why use 2019 as baseline instead of the lowest year on the chart?*
+
+```{r meta}
+BASELINE_YEAR <- 2019L
+BASELINE_EMISSIONS <- 335331
+TARGET_YEAR <- 2045L
+REDUCTION_PCT <- 0.90
+target_emissions <- round(BASELINE_EMISSIONS * (1 - REDUCTION_PCT))
+
+commitment_pace <- function(year) {
+  if (year <= BASELINE_YEAR) return(BASELINE_EMISSIONS)
+  if (year >= TARGET_YEAR) return(target_emissions)
+  frac <- (year - BASELINE_YEAR) / (TARGET_YEAR - BASELINE_YEAR)
+  round(BASELINE_EMISSIONS - (BASELINE_EMISSIONS - target_emissions) * frac)
+}
+
+cat("2019 baseline:", comma(BASELINE_EMISSIONS), "t CO2e\n")
+cat("2045 target (90% cut):", comma(target_emissions), "t CO2e\n")
+```
+
+---
+
+## 3. Fit a trend from 2019
+
+**Goal:** Quantify recent direction with `lm()` — same idea as the orange trend on the live chart.
+
+**Concept:** We fit only **2019 onward** because COVID distorts 2020 and policy baseline is 2019.
+
+**You should see:** Regression table with slope (tons per year) — negative slope = declining emissions.
+
+**Mentor check-in:** *If slope were positive, what would that imply about reaching 2045?*
+
+```{r trend}
+recent <- emissions |> filter(year >= BASELINE_YEAR)
+fit <- lm(emissions ~ year, data = recent)
+fit_tidy <- tidy(fit)
+fit_tidy
+
+slope <- coef(fit)[["year"]]
+intercept <- coef(fit)[["(Intercept)"]]
+
+reach_year <- if (slope >= 0) {
+  NA_integer_
+} else {
+  yr <- ceiling((target_emissions - intercept) / slope)
+  if (yr > TARGET_YEAR) yr else NA_integer_
+}
+
+if (!is.na(reach_year)) {
+  message("Linear trend from 2019 reaches the 2045 target around ", reach_year,
+          " (simple extrapolation — not a forecast).")
+} else {
+  message("At the current post-2019 slope, emissions are not declining toward the 2045 target.")
+}
+```
+
+---
+
+## 4. Build the chart
+
+**Goal:** Layer three stories on one plot: **reported** (dots), **trend** (dashed orange), **commitment pace** (dashed blue).
+
+**You should see:** Chart matching the structure of the [live tracker](../index.html).
+
+**Mentor check-in:** *Is the latest year above or below the dashed commitment line?*
+
+```{r chart, fig.width=9, fig.height=5}
+chart_years <- seq(min(emissions$year), TARGET_YEAR)
+commitment_df <- tibble(
+  year = chart_years,
+  commitment = vapply(chart_years, commitment_pace, numeric(1))
+)
+
+trend_df <- tibble(
+  year = chart_years,
+  trend = if_else(year >= BASELINE_YEAR, slope * year + intercept, NA_real_)
+)
+
+latest <- emissions |> slice_tail(n = 1)
+pace_latest <- commitment_pace(latest$year)
+gap <- latest$emissions - pace_latest
+
+ggplot() +
+  geom_line(data = commitment_df, aes(x = year, y = commitment),
+            color = "#5B8BB0", linewidth = 1, linetype = "dashed") +
+  geom_line(data = trend_df, aes(x = year, y = trend),
+            color = "#D98E5A", linewidth = 1, linetype = "dashed") +
+  geom_point(data = emissions, aes(x = year, y = emissions),
+             color = "#2F6B4F", size = 2.2) +
+  geom_vline(xintercept = TARGET_YEAR, color = "#4A5A54", linetype = "dotted", alpha = 0.6) +
+  scale_y_continuous(labels = label_comma()) +
+  labs(
+    title = "UCLA greenhouse gas emissions vs. UC commitment",
+    subtitle = paste0("Scopes 1+2+3 · latest ", latest$year, ": ",
+                      comma(latest$emissions), " t CO₂e · ",
+                      if (gap > 0) paste0(comma(gap), " t above linear pace to 2045") else paste0(comma(abs(gap)), " t below pace")),
+    x = "Calendar year",
+    y = "Metric tons CO₂e",
+    caption = "Sources: UC Annual Sustainability Reports · UC Sustainable Practices Policy (90% by 2045)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(plot.title = element_text(face = "bold"))
+```
+
+---
+
+## 5. Final takeaway
+
+**Mentor prompts:**
+
+1. How far is the latest total from the **2019 baseline** and **2045 target**?
+2. Above or below the **commitment pace** this year?
+3. Why is the trend line illustrative, not a prediction?
+
+**Extension:** Write a 150-word memo a campus administrator could read.
+
+**Next:** [Live tracker](../index.html)

@@ -1,0 +1,73 @@
+campus_id,year,scope1,scope2,scope3,total,verified,source
+berkeley,2009,144059,9048,40524,193631,true,UC Berkeley Sustainability Metrics
+berkeley,2014,125598,6325,36422,168345,true,UC Berkeley Sustainability Metrics
+berkeley,2019,135391,2320,41137,178848,true,UC Berkeley Sustainability Metrics
+berkeley,2021,121220,2900,10679,134799,true,UC Berkeley Sustainability Metrics
+berkeley,2022,132512,1629,20488,154629,true,UC Annual Sustainability Report 2024 (revised scopes)
+berkeley,2023,135392,1227,35406,172025,true,UC Annual Sustainability Report 2024
+berkeley,2024,125867,196,32117,158180,true,UC Annual Sustainability Report 2025
+davis,2009,,,,280225,true,UC Annual Sustainability Report 2020
+davis,2019,131073,4414,83594,219081,true,UC Annual Sustainability Report 2020
+davis,2021,126396,19924,52680,199000,true,UC Annual Sustainability Report 2022
+davis,2022,127673,28495,55312,211480,true,UC Annual Sustainability Report 2024 (revised scopes)
+davis,2023,120696,22292,60214,203202,true,UC Annual Sustainability Report 2024
+davis,2024,122423,21427,63875,207725,true,UC Annual Sustainability Report 2025
+irvine,2019,77925,3840,29430,111195,true,UC Annual Sustainability Report 2020
+irvine,2021,79763,1082,19293,100138,true,UC Annual Sustainability Report 2022
+irvine,2022,83013,1087,26067,110167,true,UC Annual Sustainability Report 2024 (revised scopes)
+irvine,2023,72732,,24608,97340,true,UC Annual Sustainability Report 2024
+irvine,2024,89126,,23759,112885,true,UC Annual Sustainability Report 2025
+merced,2019,6727,695,4921,12343,true,UC Annual Sustainability Report 2021
+merced,2021,6709,544,4917,12170,true,UC Annual Sustainability Report 2022
+merced,2022,7983,659,11453,20095,true,UC Annual Sustainability Report 2024 (revised scopes)
+merced,2023,8316,474,11617,20407,true,UC Annual Sustainability Report 2024
+merced,2024,7760,400,12040,20200,true,UC Annual Sustainability Report 2025
+riverside,2019,27547,44640,18547,90734,true,UC Annual Sustainability Report 2020
+riverside,2021,22793,38123,2354,63270,true,UC Annual Sustainability Report 2022
+riverside,2022,23282,37301,21670,82253,true,UC Annual Sustainability Report 2024 (revised scopes)
+riverside,2023,25954,35566,23313,84833,true,UC Annual Sustainability Report 2024
+riverside,2024,26076,41583,19802,87461,true,UC Annual Sustainability Report 2025
+systemwide,2009,964215,399611,433306,1797132,true,UC Annual Sustainability Report 2025 (revised scopes)
+systemwide,2019,911300,172382,427663,1511345,true,UC Annual Sustainability Report 2025 (revised scopes)
+systemwide,2020,847262,119541,198929,1165732,true,UC Annual Sustainability Report 2021
+systemwide,2021,869319,113244,195048,1177611,true,UC Annual Sustainability Report 2022
+systemwide,2022,895144,134643,321066,1350853,true,UC Annual Sustainability Report 2024 (revised scopes)
+systemwide,2023,877526,121097,363853,1362476,true,UC Annual Sustainability Report 2024
+systemwide,2024,900517,142518,355478,1398513,true,UC Annual Sustainability Report 2025
+ucla,2009,303966,0,48735,352701,true,UC Annual Sustainability Report
+ucla,2010,,,,339951,true,UC Annual Sustainability Report
+ucla,2011,,,,373175,true,UC Annual Sustainability Report
+ucla,2012,,,,377879,true,UC Annual Sustainability Report
+ucla,2013,,,,362270,true,UC Annual Sustainability Report
+ucla,2014,,,,360987,true,UC Annual Sustainability Report
+ucla,2015,218434,70160,68603,357197,true,UC Annual Sustainability Report
+ucla,2016,223863,47775,69897,341535,true,UC Annual Sustainability Report
+ucla,2017,227957,51732,82956,362645,true,UC Annual Sustainability Report
+ucla,2018,228870,51381,74938,355189,true,UC Annual Sustainability Report
+ucla,2019,230736,42788,68159,341683,true,UC policy baseline (Scopes 1+2+3)
+ucla,2020,212398,29302,29195,270895,true,UC Annual Sustainability Report
+ucla,2021,224384,29411,33567,287362,true,UC Annual Sustainability Report 2022
+ucla,2022,218696,36393,55347,310436,true,UC Annual Sustainability Report 2024 (revised scopes)
+ucla,2023,208783,36065,66862,311710,true,UC Annual Sustainability Report 2024
+ucla,2024,215280,55556,71269,342105,true,UC Annual Sustainability Report 2025
+ucsb,2019,19746,20104,15796,55646,true,UC Annual Sustainability Report 2020
+ucsb,2021,17068,254,7565,24887,true,UC Annual Sustainability Report 2022
+ucsb,2022,17645,176,14819,32640,true,UC Annual Sustainability Report 2024 (revised scopes)
+ucsb,2023,18723,215,15773,34711,true,UC Annual Sustainability Report 2024
+ucsb,2024,18595,208,15349,34152,true,UC Annual Sustainability Report 2025
+ucsc,2019,29024,313,18185,47522,true,UC Annual Sustainability Report 2020
+ucsc,2021,27684,266,9799,37749,true,UC Annual Sustainability Report 2022
+ucsc,2022,29869,277,17210,47356,true,UC Annual Sustainability Report 2024 (revised scopes)
+ucsc,2023,31317,190,21749,53256,true,UC Annual Sustainability Report 2024
+ucsc,2024,29937,195,19184,49316,true,UC Annual Sustainability Report 2025
+ucsd,2009,,,,274831,true,UC Annual Sustainability Report 2020
+ucsd,2019,163172,16793,80575,260540,true,UC Annual Sustainability Report 2020
+ucsd,2021,154383,8601,23802,186786,true,UC Annual Sustainability Report 2022
+ucsd,2022,166386,5564,53591,225541,true,UC Annual Sustainability Report 2024 (revised scopes)
+ucsd,2023,167983,5570,59093,232646,true,UC Annual Sustainability Report 2024
+ucsd,2024,176585,3661,51725,231971,true,UC Annual Sustainability Report 2025
+ucsf,2019,80081,8978,38024,127083,true,UC Annual Sustainability Report 2020
+ucsf,2021,80295,247,26567,107109,true,UC Annual Sustainability Report 2022
+ucsf,2022,79260,261,37246,116767,true,UC Annual Sustainability Report 2024 (revised scopes)
+ucsf,2023,77832,27,32585,110444,true,UC Annual Sustainability Report 2024
+ucsf,2024,79828,66,32460,112354,true,UC Annual Sustainability Report 2025
