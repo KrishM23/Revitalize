@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" aria-labelledby="title desc" role="img">
+  <title id="title">Revitalize logo</title>
+  <desc id="desc">A growing sprout rising from a downward-bending emissions curve, in a teal to blue gradient tile.</desc>
+  <defs>
+    <linearGradient id="rev-grad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2FC4A0"/>
+      <stop offset="1" stop-color="#5B8DEF"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="url(#rev-grad)"/>
+
+  <!-- ground arc the sprout grows from -->
+  <path d="M16 48 C 24 53, 40 53, 48 48"
+        fill="none" stroke="#FFFFFF" stroke-opacity="0.5"
+        stroke-width="3.2" stroke-linecap="round"/>
+
+  <!-- sprout stem -->
+  <path d="M32 48 C 32 40, 32 33, 33 26"
+        fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linecap="round"/>
+
+  <!-- left leaf -->
+  <path d="M32 34 C 22 35, 16 30, 15 21 C 25 20, 31 25, 32 34 Z" fill="#FFFFFF"/>
+  <!-- right leaf -->
+  <path d="M33 28 C 43 27, 49 21, 50 12 C 40 12, 33 18, 33 28 Z" fill="#FFFFFF"/>
+</svg>

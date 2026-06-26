@@ -154,6 +154,8 @@ function renderDashboard() {
   updateDataFreshness(metrics);
   const planLink = document.getElementById('planLink');
   if (planLink) planLink.href = `plans.html#${campusId}`;
+  const simLink = document.getElementById('simLink');
+  if (simLink) simLink.href = `simulator.html#${campusId}`;
 
   updateKpis(metrics, campus, forecast, series);
   updatePace(metrics);

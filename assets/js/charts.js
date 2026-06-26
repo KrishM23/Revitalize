@@ -576,3 +576,149 @@ export function createModelComparisonChart(canvas, { models }) {
     }
   });
 }
+
+/** What-if simulator: baseline forecast vs scenario vs goal path. */
+export function createScenarioChart(canvas, {
+  series,
+  policy = UC_POLICY,
+  result
+}) {
+  if (!canvas || !result) return null;
+
+  const chartStart = Math.max(2015, series[0]?.year ?? 2015);
+  const chartEnd = policy.targetYear;
+  const years = [];
+  for (let y = chartStart; y <= chartEnd; y++) years.push(y);
+
+  const reportedMap = Object.fromEntries(series.map(p => [p.year, p.emissions]));
+  const reported = years.map(y => reportedMap[y] ?? null);
+
+  const baselineLine = years.map(y => {
+    const idx = result.years.indexOf(y);
+    return idx >= 0 ? result.baseline[idx] : null;
+  });
+  const scenarioLine = years.map(y => {
+    const idx = result.years.indexOf(y);
+    return idx >= 0 ? result.scenario[idx] : null;
+  });
+  const baselineEmissions = result.target2045 / (1 - policy.reductionPct);
+  const commitment = buildCommitmentLine(
+    policy.baselineYear,
+    baselineEmissions,
+    policy.targetYear,
+    policy.reductionPct,
+    years
+  );
+
+  const lastReported = series[series.length - 1]?.year;
+  if (lastReported) {
+    const i = years.indexOf(lastReported);
+    if (i >= 0 && baselineLine[i] == null) baselineLine[i] = reported[i];
+  }
+
+  return new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: 'Reported',
+          data: reported,
+          borderColor: COLORS.actual,
+          backgroundColor: COLORS.actualFill,
+          borderWidth: 2.5,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          tension: 0.15,
+          fill: false,
+          spanGaps: false
+        },
+        {
+          label: 'Current trend',
+          data: baselineLine,
+          borderColor: COLORS.forecast,
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          tension: 0.2,
+          fill: false
+        },
+        {
+          label: 'Your scenario',
+          data: scenarioLine,
+          borderColor: '#9B7FE8',
+          borderWidth: 2.5,
+          pointRadius: 0,
+          tension: 0.2,
+          fill: false
+        },
+        {
+          label: '2045 goal path',
+          data: commitment,
+          borderColor: COLORS.commitment,
+          borderWidth: 1.5,
+          borderDash: [4, 4],
+          pointRadius: 0,
+          tension: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          align: 'end',
+          labels: {
+            color: '#AEB9C7',
+            font: { family: 'Inter', size: 11 },
+            boxWidth: 12,
+            boxHeight: 2,
+            usePointStyle: false
+          }
+        },
+        tooltip: {
+          ...tooltipDefaults,
+          callbacks: {
+            label: c => {
+              if (c.parsed.y == null) return null;
+              return ` ${c.dataset.label}: ${formatEmissionsFull(c.parsed.y)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ...axisDefaults(),
+          ticks: { ...axisDefaults().ticks, maxRotation: 0, autoSkipPadding: 12 }
+        },
+        y: {
+          ...axisDefaults(),
+          ticks: {
+            ...axisDefaults().ticks,
+            callback: v => formatEmissionsShort(v)
+          }
+        }
+      }
+    },
+    plugins: [commitmentDeadlinePlugin(policy.targetYear)]
+  });
+}
+
+/** Update an existing scenario chart in place (smooth, no recreate). */
+export function updateScenarioChart(chart, result) {
+  if (!chart || !result) return;
+  const labels = chart.data.labels;
+  const scenarioLine = labels.map(y => {
+    const idx = result.years.indexOf(y);
+    return idx >= 0 ? result.scenario[idx] : null;
+  });
+  // dataset index 2 is "Your scenario"
+  if (chart.data.datasets[2]) {
+    chart.data.datasets[2].data = scenarioLine;
+    chart.update('none');
+  }
+}
