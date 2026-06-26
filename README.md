@@ -1,6 +1,6 @@
 # Revitalize
 
-Revitalize is a UC-wide carbon dashboard I built to track how each campus is doing on climate goals. It pulls official UC emissions data and turns it into forecasts, campus-specific action plans, and an interactive what-if simulator so you can actually see where things are headed by 2045.
+Revitalize helps anyone in the UC community see whether their campus is on track for the 2045 climate goal, and what it would take to get there. Pick a campus, compare progress across the system, run live what-if scenarios, and download a tailored action plan, all from the same official emissions data UC publishes each year.
 
 ## What's here
 
