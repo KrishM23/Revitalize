@@ -79,6 +79,26 @@
       </div>
     </section>
 
+    <div class="compare-toolbar">
+      <label class="compare-filter-label" for="compareSort">Sort by</label>
+      <select id="compareSort" class="campus-select compare-select" aria-label="Sort campuses">
+        <option value="emissions">Latest emissions (high to low)</option>
+        <option value="goal">Goal progress (best first)</option>
+        <option value="progress">Cut since 2019 (most first)</option>
+        <option value="gap">Projected 2045 gap (largest first)</option>
+        <option value="percap">Per-student emissions</option>
+        <option value="name">Campus name (A-Z)</option>
+      </select>
+      <label class="compare-filter-label" for="compareFilter">Show</label>
+      <select id="compareFilter" class="campus-select compare-select" aria-label="Filter campuses">
+        <option value="all">All campuses</option>
+        <option value="on-track">On pace only</option>
+        <option value="behind">Behind pace only</option>
+      </select>
+      <button type="button" class="btn-secondary" id="sourcesBtn">Sources</button>
+      <span class="compare-filter-note" id="compareFilterNote"></span>
+    </div>
+
     <div class="table-wrap">
       <table class="data-table data-table-compact">
         <thead>

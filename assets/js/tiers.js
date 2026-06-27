@@ -11,18 +11,18 @@ const MATERIALS = {
 
 /** Ordered lowest → highest; thresholds use progress-to-2045-goal %. */
 export const TIER_LADDER = [
-  { id: 'bronze-1', material: 'bronze', level: 1, min: 0, max: 10, title: 'Sprout', tagline: 'Every journey starts with a first step.', label: 'Bronze I' },
-  { id: 'bronze-2', material: 'bronze', level: 2, min: 10, max: 20, title: 'Sapling', tagline: 'Early roots are taking hold.', label: 'Bronze II' },
-  { id: 'bronze-3', material: 'bronze', level: 3, min: 20, max: 30, title: 'Grove', tagline: 'Steady growth on the path.', label: 'Bronze III' },
-  { id: 'silver-1', material: 'silver', level: 1, min: 30, max: 40, title: 'Spark', tagline: 'Momentum is building.', label: 'Silver I' },
-  { id: 'silver-2', material: 'silver', level: 2, min: 40, max: 50, title: 'Stream', tagline: 'Consistent cuts add up.', label: 'Silver II' },
-  { id: 'silver-3', material: 'silver', level: 3, min: 50, max: 60, title: 'Surge', tagline: 'Halfway to the promise.', label: 'Silver III' },
-  { id: 'gold-1', material: 'gold', level: 1, min: 60, max: 70, title: 'Rise', tagline: 'Leading from the front.', label: 'Gold I' },
-  { id: 'gold-2', material: 'gold', level: 2, min: 70, max: 80, title: 'Rally', tagline: 'Others are watching.', label: 'Gold II' },
-  { id: 'gold-3', material: 'gold', level: 3, min: 80, max: 90, title: 'Radiant', tagline: 'Almost at the summit.', label: 'Gold III' },
-  { id: 'diamond-1', material: 'diamond', level: 1, min: 90, max: 95, title: 'Guardian', tagline: 'On pace for 2045.', label: 'Diamond I' },
-  { id: 'diamond-2', material: 'diamond', level: 2, min: 95, max: 100, title: 'Luminary', tagline: 'The goal is in sight.', label: 'Diamond II' },
-  { id: 'diamond-3', material: 'diamond', level: 3, min: 100, max: Infinity, title: 'Legend', tagline: 'Goal achieved.', label: 'Diamond III' }
+  { id: 'bronze-1', material: 'bronze', level: 1, min: 0, max: 10, title: 'Sprout', tagline: 'Under 10% of the way to the 2045 goal.', label: 'Bronze I' },
+  { id: 'bronze-2', material: 'bronze', level: 2, min: 10, max: 20, title: 'Sapling', tagline: '10 to 20% of the way to the 2045 goal.', label: 'Bronze II' },
+  { id: 'bronze-3', material: 'bronze', level: 3, min: 20, max: 30, title: 'Grove', tagline: '20 to 30% of the way to the 2045 goal.', label: 'Bronze III' },
+  { id: 'silver-1', material: 'silver', level: 1, min: 30, max: 40, title: 'Spark', tagline: '30 to 40% of the way to the 2045 goal.', label: 'Silver I' },
+  { id: 'silver-2', material: 'silver', level: 2, min: 40, max: 50, title: 'Stream', tagline: '40 to 50% of the way to the 2045 goal.', label: 'Silver II' },
+  { id: 'silver-3', material: 'silver', level: 3, min: 50, max: 60, title: 'Surge', tagline: 'Past the halfway mark to the 2045 goal.', label: 'Silver III' },
+  { id: 'gold-1', material: 'gold', level: 1, min: 60, max: 70, title: 'Rise', tagline: '60 to 70% of the way to the 2045 goal.', label: 'Gold I' },
+  { id: 'gold-2', material: 'gold', level: 2, min: 70, max: 80, title: 'Rally', tagline: '70 to 80% of the way to the 2045 goal.', label: 'Gold II' },
+  { id: 'gold-3', material: 'gold', level: 3, min: 80, max: 90, title: 'Radiant', tagline: '80 to 90% of the way to the 2045 goal.', label: 'Gold III' },
+  { id: 'diamond-1', material: 'diamond', level: 1, min: 90, max: 95, title: 'Guardian', tagline: 'On pace for the 2045 goal.', label: 'Diamond I' },
+  { id: 'diamond-2', material: 'diamond', level: 2, min: 95, max: 100, title: 'Luminary', tagline: 'Within reach of the full 2045 goal.', label: 'Diamond II' },
+  { id: 'diamond-3', material: 'diamond', level: 3, min: 100, max: Infinity, title: 'Legend', tagline: 'Meets or exceeds the 2045 goal.', label: 'Diamond III' }
 ];
 
 /**
@@ -171,6 +171,70 @@ export function renderTierLadder(items, activeCampusId = null) {
         </div>`;
     }
   }
+  html += '</div>';
+  return html;
+}
+
+/**
+ * Compact reference table of all 12 ranks (professional, end-of-page).
+ * @param {{ campus: object, metrics: object }[]} items
+ * @param {string} [activeCampusId]
+ */
+export function renderTierReference(items, activeCampusId = null) {
+  const byTier = Object.fromEntries(TIER_LADDER.map(t => [t.id, []]));
+  for (const item of items) {
+    const tier = getTier(item.metrics.pctOfGoal);
+    byTier[tier.id].push(item);
+  }
+
+  const activeItem = activeCampusId ? items.find(i => i.campus.id === activeCampusId) : null;
+  const activeTierId = activeItem ? getTier(activeItem.metrics.pctOfGoal).id : null;
+
+  const groups = [
+    { material: 'bronze', label: 'Bronze' },
+    { material: 'silver', label: 'Silver' },
+    { material: 'gold', label: 'Gold' },
+    { material: 'diamond', label: 'Diamond' }
+  ];
+
+  let html = `
+    <div class="tier-ref-table" role="table" aria-label="Climate progress ranks">
+      <div class="tier-ref-head" role="row">
+        <span role="columnheader">Rank</span>
+        <span role="columnheader">Progress to 2045 goal</span>
+        <span role="columnheader">Campuses at this rank</span>
+      </div>`;
+
+  for (const group of groups) {
+    html += `<div class="tier-ref-group" role="rowgroup" aria-label="${group.label} ranks">`;
+    html += `<div class="tier-ref-group-label">${group.label}</div>`;
+    for (const tier of TIER_LADDER.filter(t => t.material === group.material)) {
+      const occupants = byTier[tier.id] ?? [];
+      const isActive = tier.id === activeTierId;
+      const range = tier.max === Infinity ? `${tier.min}%+` : `${tier.min}–${tier.max}%`;
+      const campuses = occupants.length
+        ? occupants.map(o => `
+            <button type="button" class="tier-ref-campus" data-campus="${o.campus.id}" title="${o.campus.name}">
+              ${o.campus.shortName}
+            </button>`).join('')
+        : '<span class="tier-ref-empty">None yet</span>';
+
+      html += `
+        <div class="tier-ref-row${isActive ? ' is-active' : ''}" role="row" data-tier="${tier.id}">
+          <span class="tier-ref-rank" role="cell">
+            ${renderShield(tier.material, tier.level, { size: 26, title: tier.label })}
+            <span class="tier-ref-names">
+              <strong>${tier.title}</strong>
+              <small>${tier.label}</small>
+            </span>
+          </span>
+          <span class="tier-ref-range mono" role="cell">${range}</span>
+          <span class="tier-ref-campus-list" role="cell">${campuses}</span>
+        </div>`;
+    }
+    html += '</div>';
+  }
+
   html += '</div>';
   return html;
 }

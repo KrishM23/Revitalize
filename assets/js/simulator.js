@@ -22,6 +22,7 @@ import {
 import { createScenarioChart, updateScenarioChart, destroyChart } from './charts.js';
 import { glossaryBtn, renderGlossaryPopups, setupGlossaryTips } from './glossary.js';
 import { SCOPE_LABELS } from './campus-plans.js';
+import { initSourcesDrawer, refreshSourcesDrawer } from './sources.js';
 
 let selectedId = 'berkeley';
 let levers = { ...DEFAULT_LEVERS };
@@ -42,6 +43,12 @@ async function init() {
     ]);
     setupGlossaryHost();
     setupSelector();
+    initSourcesDrawer({
+      getContext: () => ({
+        campus: getCampuses().find(c => c.id === selectedId),
+        page: 'What-if simulator'
+      })
+    });
     readHash();
     buildPage();
     window.addEventListener('hashchange', () => { readHash(); buildPage(); });
@@ -90,6 +97,69 @@ function readHash() {
     const select = document.getElementById('simCampusSelect');
     if (select) select.value = id;
   }
+  readScenarioParams();
+}
+
+function readScenarioParams() {
+  const params = new URLSearchParams(location.search);
+  const preset = params.get('preset');
+  if (preset && SCENARIO_PRESETS.some(p => p.id === preset)) {
+    levers = { ...SCENARIO_PRESETS.find(p => p.id === preset).levers };
+    activePreset = preset;
+    return;
+  }
+  const readNum = (key, fallback) => {
+    const raw = params.get(key);
+    if (raw == null || raw === '') return fallback;
+    const n = Number(raw);
+    return Number.isFinite(n) ? n : fallback;
+  };
+  if ([...params.keys()].some(k => ['s1', 's2', 's3', 'r'].includes(k))) {
+    levers = {
+      scope1Cut: readNum('s1', DEFAULT_LEVERS.scope1Cut),
+      scope2Cut: readNum('s2', DEFAULT_LEVERS.scope2Cut),
+      scope3Cut: readNum('s3', DEFAULT_LEVERS.scope3Cut),
+      rampYears: readNum('r', DEFAULT_LEVERS.rampYears)
+    };
+    activePreset = '';
+  }
+}
+
+function buildShareUrl() {
+  const base = `${location.origin}${location.pathname}`;
+  const params = new URLSearchParams();
+  if (activePreset && SCENARIO_PRESETS.some(p => p.id === activePreset)) {
+    params.set('preset', activePreset);
+  } else {
+    params.set('s1', String(levers.scope1Cut ?? 0));
+    params.set('s2', String(levers.scope2Cut ?? 0));
+    params.set('s3', String(levers.scope3Cut ?? 0));
+    params.set('r', String(levers.rampYears ?? DEFAULT_LEVERS.rampYears));
+  }
+  const qs = params.toString();
+  return `${base}${qs ? `?${qs}` : ''}#${selectedId}`;
+}
+
+function syncShareUrl() {
+  const next = buildShareUrl();
+  if (`${location.pathname}${location.search}${location.hash}` !== next.replace(location.origin, '')) {
+    history.replaceState(null, '', next);
+  }
+}
+
+async function copyShareLink() {
+  const url = buildShareUrl();
+  const btn = document.getElementById('simShareBtn');
+  try {
+    await navigator.clipboard.writeText(url);
+    if (btn) {
+      const prev = btn.textContent;
+      btn.textContent = 'Link copied';
+      setTimeout(() => { btn.textContent = prev; }, 1800);
+    }
+  } catch {
+    window.prompt('Copy this scenario link:', url);
+  }
 }
 
 function resetLevers() {
@@ -136,7 +206,10 @@ function buildPage() {
 
         ${renderScopeMix(scopeData, metrics.latest.emissions)}
 
-        <button type="button" class="btn-secondary sim-reset" id="simReset">Reset</button>
+        <div class="sim-actions">
+          <button type="button" class="btn-primary sim-share" id="simShareBtn">Copy share link</button>
+          <button type="button" class="btn-secondary sim-reset" id="simReset">Reset sliders</button>
+        </div>
       </section>
 
       <div class="sim-results">
@@ -190,6 +263,7 @@ function buildPage() {
   bindControls();
   setupGlossaryTips(root);
   syncControlUI();
+  refreshSourcesDrawer();
 
   const firstResult = compute();
   destroyChart(chart);
@@ -290,6 +364,7 @@ function paint(result) {
   setBar('barGoal', 'valGoal', result.target2045);
 
   updateScenarioChart(chart, result);
+  syncShareUrl();
 }
 
 /* ── Controls ── */
@@ -305,6 +380,7 @@ function bindControls() {
       activePreset = '';
       markActivePreset();
       paint(compute());
+      syncShareUrl();
     });
   });
 
@@ -316,6 +392,7 @@ function bindControls() {
       activePreset = preset.id;
       syncControlUI();
       paint(compute());
+      syncShareUrl();
     });
   });
 
@@ -324,7 +401,11 @@ function bindControls() {
     resetLevers();
     syncControlUI();
     paint(compute());
+    syncShareUrl();
   });
+
+  const share = document.getElementById('simShareBtn');
+  if (share) share.addEventListener('click', copyShareLink);
 }
 
 function markActivePreset() {

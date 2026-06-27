@@ -68,6 +68,7 @@
         <select id="campusSelect" class="campus-select" aria-label="Select campus"></select>
         <a href="plans.html" class="btn-secondary" id="planLink">Action plan</a>
         <a href="simulator.html" class="btn-secondary" id="simLink">What-if</a>
+        <button type="button" class="btn-secondary" id="sourcesBtn">Sources</button>
         <button type="button" class="btn-secondary" id="exportBtn">Export CSV</button>
       </div>
     </header>
@@ -227,6 +228,10 @@
           <span class="forecast-gap" id="forecastGap">...</span>.
         </p>
         <p class="forecast-readout" id="forecastRate"></p>
+        <div class="campus-insight" id="campusInsight" hidden>
+          <p class="campus-insight-kicker">Why this campus?</p>
+          <p class="campus-insight-text" id="campusInsightText"></p>
+        </div>
         <details class="forecast-details">
           <summary>How we forecast this</summary>
           <p class="ensemble-note" id="ensembleNote" hidden>The projection blends several models, weighted by how well each one predicts years it hasn't seen.</p>
@@ -272,17 +277,6 @@
       </section>
     </div>
 
-    <!-- TIER LADDER -->
-    <section class="panel" id="tierLadderPanel" aria-label="Tier ladder">
-      <div class="panel-head">
-        <div>
-          <h3>Climate tier ladder</h3>
-          <p class="panel-sub">12 ranks from Sprout to Legend, earned by progress toward the 2045 goal. Dots show where each campus stands.</p>
-        </div>
-      </div>
-      <div id="tierLadder"></div>
-    </section>
-
     <!-- CAMPUS GRID -->
     <section aria-label="All campuses">
       <div class="section-head">
@@ -290,6 +284,16 @@
         <p>Select a campus to explore its emissions and where they're heading.</p>
       </div>
       <div class="campus-grid" id="campusGrid"></div>
+    </section>
+
+    <section class="panel tier-reference-panel" aria-label="Climate progress ranks">
+      <div class="panel-head">
+        <div>
+          <h3>Climate progress ranks</h3>
+          <p class="panel-sub">All 12 ranks, grouped by tier. Each campus earns a rank based on progress toward the 2045 goal.</p>
+        </div>
+      </div>
+      <div id="tierReference"></div>
     </section>
 
     <p class="page-footer" id="dataFreshnessNote">Data: UC Annual Report on Sustainable Practices · Policy: 90% reduction from 2019 by 2045 · <a href="https://sustainabilityreport.ucop.edu/" target="_blank" rel="noopener">UC Sustainability Reports</a></p>

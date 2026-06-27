@@ -6,8 +6,12 @@ import { buildForecast } from './forecast.js';
 import { createComparisonChart, destroyChart } from './charts.js';
 import { getTier, renderShield } from './tiers.js';
 import { renderGlossaryPopups, setupGlossaryTips } from './glossary.js';
+import { initSourcesDrawer } from './sources.js';
 
 let chart = null;
+let allItems = [];
+let sortBy = 'emissions';
+let filterBy = 'all';
 
 async function init() {
   if (typeof Chart === 'undefined') {
@@ -24,6 +28,8 @@ async function init() {
       ]);
     }
     setupGlossaryTips();
+    initSourcesDrawer({ getContext: () => ({ page: 'Compare campuses' }) });
+    setupFilters();
     render();
   } catch (err) {
     console.error(err);
@@ -35,19 +41,74 @@ async function init() {
   }
 }
 
+function setupFilters() {
+  document.getElementById('compareSort')?.addEventListener('change', e => {
+    sortBy = e.target.value;
+    renderTable();
+    renderChart();
+  });
+  document.getElementById('compareFilter')?.addEventListener('change', e => {
+    filterBy = e.target.value;
+    renderTable();
+    renderChart();
+  });
+}
+
+function getVisibleItems() {
+  let items = [...allItems];
+  if (filterBy === 'on-track') items = items.filter(i => i.metrics.onTrack);
+  if (filterBy === 'behind') items = items.filter(i => !i.metrics.onTrack);
+
+  switch (sortBy) {
+    case 'goal':
+      return items.sort((a, b) => b.metrics.pctOfGoal - a.metrics.pctOfGoal);
+    case 'gap':
+      return items.sort((a, b) => {
+        const ga = a.forecast.error ? -Infinity : (a.forecast.gap2045 ?? 0);
+        const gb = b.forecast.error ? -Infinity : (b.forecast.gap2045 ?? 0);
+        return gb - ga;
+      });
+    case 'progress':
+      return items.sort((a, b) => b.metrics.pctFromBaseline - a.metrics.pctFromBaseline);
+    case 'percap':
+      return items.sort((a, b) => {
+        const pa = perCapita(a.metrics.latest.emissions, a.campus.enrollment) ?? 0;
+        const pb = perCapita(b.metrics.latest.emissions, b.campus.enrollment) ?? 0;
+        return pb - pa;
+      });
+    case 'name':
+      return items.sort((a, b) => a.campus.name.localeCompare(b.campus.name));
+    default:
+      return items.sort((a, b) => b.metrics.latest.emissions - a.metrics.latest.emissions);
+  }
+}
+
 function render() {
-  const items = getAllCampusMetrics(computeCampusMetrics).map(item => ({
+  allItems = getAllCampusMetrics(computeCampusMetrics).map(item => ({
     ...item,
     forecast: buildForecast(item.series)
   }));
+  renderChart();
+  renderTable();
+  const fresh = getDataFreshness();
+  document.getElementById('compareYear').textContent = fresh.latestYear ?? allItems[0]?.metrics.latest.year ?? '...';
+}
 
-  const sorted = [...items].sort((a, b) => b.metrics.latest.emissions - a.metrics.latest.emissions);
-
+function renderChart() {
+  const items = getVisibleItems();
   destroyChart(chart);
   chart = createComparisonChart(document.getElementById('compareChart'), { items });
+  document.getElementById('compareCount').textContent = allItems.length;
+  const note = document.getElementById('compareFilterNote');
+  if (note) {
+    note.textContent = items.length !== allItems.length ? `Showing ${items.length} of ${allItems.length}` : '';
+  }
+}
 
+function renderTable() {
+  const items = getVisibleItems();
   const tbody = document.getElementById('compareTableBody');
-  tbody.innerHTML = sorted.map(({ campus, metrics, forecast }) => {
+  tbody.innerHTML = items.map(({ campus, metrics, forecast }) => {
     const pc = perCapita(metrics.latest.emissions, campus.enrollment);
     const tier = getTier(metrics.pctOfGoal);
     const shield = renderShield(tier.material, tier.level, { size: 30, title: `${tier.title} (${tier.label})` });
@@ -67,10 +128,6 @@ function render() {
         <td><span class="status-pill ${metrics.onTrack ? 'on-track' : 'behind'}">${metrics.onTrack ? 'On pace' : 'Behind'}</span></td>
       </tr>`;
   }).join('');
-
-  document.getElementById('compareCount').textContent = sorted.length;
-  const fresh = getDataFreshness();
-  document.getElementById('compareYear').textContent = fresh.latestYear ?? sorted[0]?.metrics.latest.year ?? '...';
 }
 
 init();

@@ -22,11 +22,13 @@ import {
 import {
   getTier,
   renderShield,
-  renderTierLadder,
+  renderTierReference,
   tierProgress,
   tierProgressLabel
 } from './tiers.js';
 import { renderGlossaryPopups, setupGlossaryTips } from './glossary.js';
+import { buildCampusInsight } from './insights.js';
+import { initSourcesDrawer, refreshSourcesDrawer } from './sources.js';
 
 let state = {
   selectedCampusId: 'systemwide',
@@ -70,6 +72,12 @@ async function init() {
     const popupHost = document.getElementById('glossaryPopups');
     if (popupHost) popupHost.innerHTML = renderGlossaryPopups();
     setupGlossaryTips();
+    initSourcesDrawer({
+      getContext: () => {
+        const campus = getCampuses().find(c => c.id === state.selectedCampusId);
+        return { campus, page: 'Dashboard' };
+      }
+    });
     setupFromHash();
     updateDataFreshness();
     renderDashboard();
@@ -157,11 +165,15 @@ function renderDashboard() {
   const simLink = document.getElementById('simLink');
   if (simLink) simLink.href = `simulator.html#${campusId}`;
 
+  const scopeData = (!isSystem && metrics) ? getScopeBreakdown(campusId, metrics.latest.year) : null;
+
   updateKpis(metrics, campus, forecast, series);
   updatePace(metrics);
   updateTierHero(metrics, campus);
   updateForecastPanel(forecast, metrics);
+  updateCampusInsight(metrics, campus, forecast, scopeData, policy);
   updateNarrative(metrics, campus, forecast);
+  refreshSourcesDrawer();
 
   // Main chart
   destroyChart(state.charts.main);
@@ -174,7 +186,6 @@ function renderDashboard() {
 
   // Scope doughnut (campus only, when data exists)
   const scopePanel = document.getElementById('scopePanel');
-  const scopeData = (!isSystem && metrics) ? getScopeBreakdown(campusId, metrics.latest.year) : null;
   if (scopePanel) {
     scopePanel.hidden = !scopeData;
     if (scopeData) {
@@ -188,8 +199,8 @@ function renderDashboard() {
   if (details?.open) renderModelChart(state.currentForecast);
 
   renderStandings();
-  renderTierLadderSection();
   renderCampusGrid();
+  renderTierReferenceSection();
 }
 
 function renderModelChart(forecast) {
@@ -390,6 +401,17 @@ function updateForecastPanel(forecast, metrics) {
   if (note) note.hidden = !forecast.ensemble;
 }
 
+function updateCampusInsight(metrics, campus, forecast, scopeData, policy) {
+  const block = document.getElementById('campusInsight');
+  const text = document.getElementById('campusInsightText');
+  if (!block || !text) return;
+
+  const insight = buildCampusInsight({ campus, metrics, forecast, scopeData, policy });
+  const show = campus && campus.id !== 'systemwide' && insight;
+  block.hidden = !show;
+  if (show) text.textContent = insight;
+}
+
 function updateNarrative(metrics, campus, forecast) {
   const note = document.getElementById('carbonNote');
   if (!note) return;
@@ -473,29 +495,16 @@ function updateTierHero(metrics, campus) {
   }
 }
 
-function renderTierLadderSection() {
-  const el = document.getElementById('tierLadder');
+/* ── TIER REFERENCE (compact rank guide) ── */
+function renderTierReferenceSection() {
+  const el = document.getElementById('tierReference');
   if (!el) return;
   const items = getAllCampusMetrics(computeCampusMetrics);
-  el.innerHTML = renderTierLadder(items, state.selectedCampusId === 'systemwide' ? null : state.selectedCampusId);
+  const activeId = state.selectedCampusId === 'systemwide' ? null : state.selectedCampusId;
+  el.innerHTML = renderTierReference(items, activeId);
 
-  el.querySelectorAll('.tier-dot').forEach(dot => {
-    dot.addEventListener('click', e => {
-      e.stopPropagation();
-      const cell = dot.closest('.tier-ladder-cell');
-      const tierId = cell?.dataset.tier;
-      const match = items.find(i => getTier(i.metrics.pctOfGoal).id === tierId && dot.title === i.campus.shortName);
-      if (match) selectCampus(match.campus.id, true);
-    });
-  });
-
-  el.querySelectorAll('.tier-ladder-cell.has-campus').forEach(cell => {
-    cell.style.cursor = 'pointer';
-    cell.addEventListener('click', () => {
-      const tierId = cell.dataset.tier;
-      const occupants = items.filter(i => getTier(i.metrics.pctOfGoal).id === tierId);
-      if (occupants.length === 1) selectCampus(occupants[0].campus.id, true);
-    });
+  el.querySelectorAll('.tier-ref-campus').forEach(btn => {
+    btn.addEventListener('click', () => selectCampus(btn.dataset.campus, true));
   });
 }
 
