@@ -2104,43 +2104,21 @@ canvas { display: block; max-width: 100%; }
   transform: none;
 }
 
-/* Gentle one-time load-in for the app shell */
-@keyframes rv-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes rv-slide-in {
-  from { opacity: 0; transform: translateX(-14px); }
-  to { opacity: 1; transform: none; }
-}
+/* Gentle one-time rise for the content header */
 @keyframes rv-rise {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: none; }
 }
 
-.motion-ready .sidebar {
-  animation: rv-slide-in .5s cubic-bezier(.22, .61, .36, 1) both;
-}
+/* The sidebar is persistent chrome across pages, so it must NOT animate on
+   every navigation (that makes page switches feel like a full reload).
+   Only the content area animates in. */
 .motion-ready .topbar,
 .motion-ready .page-head-row {
-  animation: rv-rise .5s ease both;
-}
-/* Stagger the sidebar nav links */
-.motion-ready .side-nav a {
   animation: rv-rise .45s ease both;
 }
-.motion-ready .side-nav a:nth-child(1) { animation-delay: .05s; }
-.motion-ready .side-nav a:nth-child(2) { animation-delay: .09s; }
-.motion-ready .side-nav a:nth-child(3) { animation-delay: .13s; }
-.motion-ready .side-nav a:nth-child(4) { animation-delay: .17s; }
-.motion-ready .side-nav a:nth-child(5) { animation-delay: .21s; }
-.motion-ready .side-nav a:nth-child(6) { animation-delay: .25s; }
-.motion-ready .side-nav a:nth-child(7) { animation-delay: .29s; }
-.motion-ready .promise-card {
-  animation: rv-fade-in .7s ease .3s both;
-}
 
-/* Active nav indicator grows in */
+/* Active nav indicator (static, no per-load animation) */
 .side-nav a.active { position: relative; }
 .side-nav a.active::before {
   content: '';
@@ -2148,13 +2126,11 @@ canvas { display: block; max-width: 100%; }
   left: 0;
   top: 50%;
   width: 3px;
-  height: 0;
+  height: 60%;
   border-radius: 0 3px 3px 0;
   background: var(--accent);
   transform: translateY(-50%);
-  transition: height .35s cubic-bezier(.22, .61, .36, 1);
 }
-.motion-ready .side-nav a.active::before { height: 60%; }
 
 /* Panel + card hover lift */
 .panel {
