@@ -2085,3 +2085,136 @@ canvas { display: block; max-width: 100%; }
 @media (max-width: 640px) {
   .compare-select { min-width: 100%; flex: 1 1 100%; }
 }
+
+/* ──────────────────────────────────────────────
+   MOTION & ANIMATIONS (progressive enhancement)
+   Only active when JS adds .motion-ready, so content
+   stays visible if JS is off or reduced-motion is set.
+   ────────────────────────────────────────────── */
+
+/* Scroll/entrance reveal */
+.motion-ready .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.22, .61, .36, 1);
+  will-change: opacity, transform;
+}
+.motion-ready .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gentle one-time load-in for the app shell */
+@keyframes rv-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes rv-slide-in {
+  from { opacity: 0; transform: translateX(-14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes rv-rise {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.motion-ready .sidebar {
+  animation: rv-slide-in .5s cubic-bezier(.22, .61, .36, 1) both;
+}
+.motion-ready .topbar,
+.motion-ready .page-head-row {
+  animation: rv-rise .5s ease both;
+}
+/* Stagger the sidebar nav links */
+.motion-ready .side-nav a {
+  animation: rv-rise .45s ease both;
+}
+.motion-ready .side-nav a:nth-child(1) { animation-delay: .05s; }
+.motion-ready .side-nav a:nth-child(2) { animation-delay: .09s; }
+.motion-ready .side-nav a:nth-child(3) { animation-delay: .13s; }
+.motion-ready .side-nav a:nth-child(4) { animation-delay: .17s; }
+.motion-ready .side-nav a:nth-child(5) { animation-delay: .21s; }
+.motion-ready .side-nav a:nth-child(6) { animation-delay: .25s; }
+.motion-ready .side-nav a:nth-child(7) { animation-delay: .29s; }
+.motion-ready .promise-card {
+  animation: rv-fade-in .7s ease .3s both;
+}
+
+/* Active nav indicator grows in */
+.side-nav a.active { position: relative; }
+.side-nav a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+  transform: translateY(-50%);
+  transition: height .35s cubic-bezier(.22, .61, .36, 1);
+}
+.motion-ready .side-nav a.active::before { height: 60%; }
+
+/* Panel + card hover lift */
+.panel {
+  transition: transform .25s cubic-bezier(.22, .61, .36, 1),
+              border-color .25s, box-shadow .25s;
+}
+.panel:hover {
+  border-color: var(--border);
+  box-shadow: 0 18px 44px -30px rgba(0, 0, 0, .8);
+}
+.metric-card {
+  transition: transform .25s cubic-bezier(.22, .61, .36, 1),
+              border-color .25s, box-shadow .25s;
+}
+.metric-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border);
+  box-shadow: 0 18px 40px -28px rgba(0, 0, 0, .85);
+}
+
+/* Button micro-interactions */
+.btn-secondary:hover { transform: translateY(-1px); }
+.btn-secondary:active,
+.btn-primary:active { transform: translateY(0) scale(.98); }
+.sim-preset:active,
+.campus-card:active { transform: scale(.99); }
+
+/* Banner image subtle zoom on hover */
+.campus-banner-img,
+.campus-card-banner-img {
+  transition: transform .6s cubic-bezier(.22, .61, .36, 1);
+}
+.campus-card:hover .campus-card-banner-img {
+  transform: scale(1.05);
+}
+
+/* Animated chips/badges */
+@keyframes rv-pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .55; transform: scale(.82); }
+}
+.motion-ready .pace-dot {
+  animation: rv-pulse-dot 2.4s ease-in-out infinite;
+}
+
+/* Focus-visible polish for keyboard users */
+.btn-secondary:focus-visible,
+.btn-primary:focus-visible,
+.side-nav a:focus-visible,
+.campus-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Honor reduced-motion at the media level too */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
